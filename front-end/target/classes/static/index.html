@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <title>AssisConnect</title>
+
+    <!-- LIBS EXTERNAS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- ESTILOS GLOBAIS + IMPRESSÃO -->
+    <style>
+        .animate-fade-in {
+          animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; transform: scale(0.95); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes scaleFadeIn {
+          from { opacity: 0; transform: scale(0.95); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes scaleFadeOut {
+          from { opacity: 1; transform: scale(1); }
+          to   { opacity: 0; transform: scale(0.95); }
+        }
+
+        .popup-notificacao {
+          animation: scaleFadeIn 0.3s ease-out forwards;
+        }
+
+        .popup-notificacao.fechar {
+          animation: scaleFadeOut 0.2s ease-in forwards;
+        }
+
+        #cabecalhoImpressaoCardapio {
+          display: none;
+          text-align: center;
+          margin-top: 100px;
+          margin-bottom: 2rem;
+          width: 100%;
+        }
+
+        #cabecalhoImpressaoCardapio h1 {
+          font-size: 30px;
+          font-weight: bold;
+          margin-bottom: 0.3rem;
+          color: #3D1F0C;
+        }
+
+        #cabecalhoImpressaoCardapio p {
+          font-size: 18px;
+          color: #3D1F0C;
+          margin: 0;
+        }
+
+        @media print {
+          body * {
+            visibility: hidden !important;
+          }
+
+          #cabecalhoImpressaoCardapio,
+          #cabecalhoImpressaoCardapio *,
+          #cardapioSemanalContainer,
+          #cardapioSemanalContainer * {
+            visibility: visible !important;
+          }
+
+          #cabecalhoImpressaoCardapio {
+            display: block !important;
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            width: 100%;
+          }
+
+          #cardapioSemanalContainer {
+            position: absolute;
+            top: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            border: none !important;
+            box-shadow: none !important;
+          }
+
+          #cardapioSemanalContainer > div:first-child {
+            display: none !important;
+          }
+
+          #cardapioSemanalContainer button,
+          #cardapioSemanalContainer [onclick*="abrirPopupEditar"],
+          #cardapioSemanalContainer [onclick*="imprimirCardapio"],
+          #cardapioSemanalContainer th:last-child,
+          #cardapioSemanalContainer td:last-child,
+          #cardapioSemanalContainer h1.text-2xl,
+          #cardapioSemanalContainer p.text-sm {
+            display: none !important;
+          }
+
+          /* ✅ ADICIONADO AGORA: impressão do RELATÓRIO MENSAL */
+          #areaRelatorioDetalhado,
+          #areaRelatorioDetalhado * {
+            visibility: visible !important;
+          }
+
+          #areaRelatorioDetalhado {
+            display: block !important;
+            position: absolute;
+            top: 5vh;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 95%;
+          }
+
+          #areaRelatorioDetalhado button {
+            display: none !important;
+          }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex font-sans">
+
+<!-- MENU INJETADO -->
+<div id="componenteMenu"></div>
+
+<!-- DASHBOARD -->
+<main id="telaDashboard" class="ml-16 flex-1 bg-gradient-to-br from-[#d2a679] to-[#b07b4e] min-h-screen p-6 hidden">
+    <div id="cardsIdosos" class="hidden grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"></div>
+</main>
+
+<!-- POPUPS GLOBAIS -->
+<div id="popupGlobal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div id="popupBox" class="bg-white rounded-2xl shadow-lg max-w-md w-full mx-4 p-6 animate-fade-in">
+        <h2 id="popupTitulo" class="text-xl font-bold text-[#3D1F0C] flex items-center gap-2 mb-3">
+            <i data-lucide="info" class="w-5 h-5"></i> Confirmação
+        </h2>
+        <p id="popupMensagem" class="text-[#3D1F0C] text-sm leading-relaxed mb-4">Mensagem padrão.</p>
+        <div class="flex justify-end gap-3">
+            <button id="popupConfirmarBtn" class="bg-[#3D1F0C] text-white px-4 py-2 rounded font-semibold hover:bg-[#2c1609]">
+                Fechar
+            </button>
+            <button id="popupCancelarBtn" class="hidden px-4 py-2 rounded-md border border-[#3D1F0C] text-[#3D1F0C] font-semibold hover:bg-gray-100">
+                Cancelar
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="popupRegistro" class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden flex items-center justify-center">
+    <div class="bg-white p-6 rounded-xl w-full max-w-md shadow-lg border-4 border-[#3D1F0C]"></div>
+</div>
+
+<div id="popupSenha" class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden flex items-center justify-center">
+    <div class="bg-white p-6 rounded-xl w-full max-w-md shadow-lg border-4 border-[#3D1F0C]"></div>
+</div>
+
+<div id="popupEditarCardapio" class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden flex items-center justify-center">
+    <div id="popupEditarCardapioBox" class="bg-white p-5 rounded-xl w-full max-w-md shadow-lg border-4 border-[#3D1F0C]">
+        <form id="formEdicaoDia"></form>
+    </div>
+</div>
+
+<!-- SCRIPT login.js -->
+<script src="js/login.js"></script>
+
+<!-- SCRIPT dinâmico + hora impressão -->
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      if (localStorage.getItem("sessaoAssisConnect") !== "ok") {
+        window.location = "html/login.html";
+        return;
+      }
+
+      const usuario = localStorage.getItem("usuarioLogado");
+      if (usuario) {
+        try {
+          const perfil = await axios.get(`http://localhost:8080/perfil/${usuario}`);
+          localStorage.setItem("usuarioAtual", JSON.stringify(perfil.data));
+        } catch (e) {}
+      }
+
+      fetch("html/menu.html")
+        .then(r => r.text())
+        .then(html => {
+          document.getElementById("componenteMenu").innerHTML = html;
+
+          setTimeout(() => {
+            document.getElementById("menuLateral")?.classList.remove("hidden");
+            document.getElementById("telaDashboard")?.classList.remove("hidden");
+
+            const sMenu = document.createElement("script");
+            sMenu.src = "js/menu.js";
+            sMenu.onload = async () => {
+              lucide.createIcons();
+              window.carregarPerfil?.();
+              window.initPerfilPopup?.();
+
+              if (localStorage.getItem("usuarioPrimeiroLogin") === "sim") {
+                const checkPopup = setInterval(() => {
+                  const perfilFoto = document.getElementById("perfilFoto");
+                  if (!perfilFoto?.dataset?.popupInit) return;
+
+                  clearInterval(checkPopup);
+                  const popup = document.createElement("div");
+                  popup.id = "popupBoasVindas";
+                  popup.className = "fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center";
+
+                  popup.innerHTML = `
+                    <div class="bg-white p-6 rounded-xl max-w-md w-full shadow-xl border-4 border-[#3D1F0C] text-[#3D1F0C] animate-fade-in relative">
+                      <h2 class="text-2xl font-bold mb-4">🎉 Boas-vindas ao AssisConnect!</h2>
+                      <p class="text-sm mb-5">
+                        Antes de começar, por favor atualize seus dados no perfil.<br>
+                        <span class="block mt-1">Isso ajuda a mantermos tudo organizado e seguro.</span>
+                      </p>
+                      <div class="text-right">
+                        <button id="btnFecharBoasVindas"
+                                class="px-4 py-2 bg-[#3D1F0C] text-white font-semibold rounded hover:bg-[#2c1609] transition">
+                          Fechar
+                        </button>
+                      </div>
+                    </div>
+                  `;
+                  document.body.appendChild(popup);
+                  document.getElementById("btnFecharBoasVindas").onclick = () => {
+                    document.getElementById("popupBoasVindas")?.remove();
+                    perfilFoto.click();
+                    localStorage.removeItem("usuarioPrimeiroLogin");
+                  };
+                }, 300);
+              }
+
+              setTimeout(() => {
+                window.verificarBadgeSino?.();
+              }, 100);
+
+              const sScript = document.createElement("script");
+              sScript.src = "js/script.js";
+              sScript.onload = () => window.funcao1?.();
+              document.body.appendChild(sScript);
+            };
+            document.body.appendChild(sMenu);
+          }, 100);
+        })
+        .catch(() => {});
+    });
+
+</script>
+</body>
+</html>

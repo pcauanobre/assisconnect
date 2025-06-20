@@ -1,0 +1,154 @@
+<!-- CONTAINER PRINCIPAL -->
+<div class="col-span-full w-full space-y-6">
+
+    <!-- TOP BARRA -->
+    <div class="bg-[#3D1F0C] text-white rounded-xl px-6 py-5 shadow grid grid-cols-3 items-center">
+
+        <!-- Esquerda: Título -->
+        <div class="flex items-center gap-3">
+            <i data-lucide="users" class="w-6 h-6"></i>
+            <div>
+                <h1 class="text-2xl font-bold">Cadastro de Idosos</h1>
+                <p class="text-sm opacity-80">Visualize e gerencie os residentes ativos da instituição.</p>
+            </div>
+        </div>
+
+        <!-- Centro: vazio para manter alinhamento -->
+        <div></div>
+
+        <!-- Direita: Ícone + busca + filtro -->
+        <div class="flex flex-col sm:flex-row justify-end items-center gap-2 sm:gap-4">
+
+            <!-- Botão de ícone "+" -->
+            <button onclick="abrirCadastroIdoso()" title="Adicionar Idoso"
+                    class="text-white hover:text-[#e5d2bd] transition">
+                <i data-lucide="plus-circle" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Campo de busca -->
+            <div class="relative w-full sm:w-64">
+                <input type="text" placeholder="Buscar idoso..." oninput="filtrarIdosos(this.value)"
+                       id="campoBusca"
+                       class="w-full p-2 pl-10 rounded-md border border-[#3D1F0C] shadow-sm text-[#3D1F0C]" />
+                <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-[#3D1F0C]"></i>
+            </div>
+
+            <!-- Botão de filtros -->
+            <button onclick="abrirFiltro()"
+                    class="flex items-center gap-2 bg-[#3D1F0C] text-white px-4 py-2 rounded-md font-bold shadow hover:bg-[#e5d2bd] transition">
+                <i data-lucide="filter" class="w-4 h-4"></i> Filtros
+            </button>
+        </div>
+    </div>
+
+    <!-- grade de cards -->
+    <div id="idososGrid"
+         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"></div>
+
+    <!-- container onde o formulário será exibido -->
+    <div id="cardsIdosos" class="hidden col-span-full w-full"></div>
+
+    <!-- POPUP DE FILTROS AVANÇADOS -->
+    <div id="popupFiltro" class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-xl shadow-lg p-6 w-[90%] max-w-md border-4 border-[#3D1F0C] animate-fade-in">
+            <h2 class="text-xl font-bold text-[#3D1F0C] mb-4 flex items-center gap-2">
+                <i data-lucide="filter"></i> Filtros Avançados
+            </h2>
+
+            <div class="space-y-4 text-sm text-[#3D1F0C]">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-semibold text-xs">Idade mínima:</label>
+                        <input type="number" id="filtroIdadeMin" class="w-full border p-2 rounded" placeholder="Ex: 60" />
+                    </div>
+                    <div>
+                        <label class="font-semibold text-xs">Idade máxima:</label>
+                        <input type="number" id="filtroIdadeMax" class="w-full border p-2 rounded" placeholder="Ex: 90" />
+                    </div>
+                </div>
+
+                <div>
+                    <label class="font-semibold text-xs">Sexo:</label>
+                    <select id="filtroSexo" class="w-full border p-2 rounded">
+                        <option value="">Todos</option>
+                        <option value="Homem">Masculino</option>
+                        <option value="Mulher">Feminino</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="font-semibold text-xs">Status:</label>
+                    <select id="filtroStatus" class="w-full border p-2 rounded">
+                        <option value="">Todos</option>
+                        <option value="Ativo">Ativo</option>
+                        <option value="Inativo">Inativo</option>
+                        <option value="Falecido">Falecido</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex justify-between gap-3 mt-6">
+                <button onclick="resetarFiltrosIdosos()"
+                        class="bg-white border border-[#3D1F0C] text-[#3D1F0C] px-4 py-2 rounded-md font-semibold hover:bg-gray-100">
+                    Resetar Filtros
+                </button>
+
+                <div class="flex gap-3">
+                    <button onclick="aplicarFiltrosIdosos()" class="bg-[#3D1F0C] text-white px-4 py-2 rounded-md font-semibold hover:bg-[#2c1609]">
+                        Aplicar
+                    </button>
+                    <button onclick="document.getElementById('popupFiltro').classList.add('hidden')"
+                            class="bg-white border border-[#3D1F0C] text-[#3D1F0C] px-4 py-2 rounded-md font-semibold hover:bg-gray-100">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<!-- ✅ CSS opcional -->
+<style>
+    .animate-fade-in {
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .grayscale {
+      filter: grayscale(100%);
+    }
+
+    .marrom-inativo {
+      position: relative;
+      filter: saturate(200%) sepia(100%) hue-rotate(311deg);
+      -webkit-filter: saturate(200%) sepia(100%) hue-rotate(311deg);
+    }
+
+    .marrom-inativo::before {
+      content: "";
+      display: block;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      position: absolute;
+      pointer-events: none;
+      mix-blend-mode: overlay;
+      background: rgba(127, 187, 227, 0.2);
+      border-radius: 9999px;
+    }
+</style>

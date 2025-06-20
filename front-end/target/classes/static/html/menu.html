@@ -1,0 +1,134 @@
+<!-- MENU LATERAL ----------------------------------------------------------- -->
+<aside id="menuLateral"
+       class="bg-[#3D1F0C] text-[#e5d2bd] w-20 fixed h-full hidden flex flex-col
+              items-center justify-between py-5 select-none">
+
+    <!-- FOTO DE PERFIL (NO TOPO) -->
+    <div class="flex flex-col items-center gap-3 mt-3">
+        <img id="perfilFoto"
+             src="https://i.pravatar.cc/40?img=5"
+             class="rounded-full w-10 h-10 border-2 border-white cursor-pointer object-cover"
+             title="Perfil"/>
+    </div>
+
+    <!-- ícones de navegação -->
+    <div class="flex flex-col items-center gap-7 mt-6">
+        <i data-lucide="home"
+           class="lucide w-6 h-6 cursor-pointer nav-icon relative"
+           onclick="ativarPagina(this); funcao1()"></i>
+
+        <i data-lucide="users"
+           class="lucide w-6 h-6 cursor-pointer nav-icon relative"
+           onclick="ativarPagina(this); funcao2()"></i>
+
+        <i data-lucide="utensils"
+           class="lucide w-6 h-6 cursor-pointer nav-icon relative"
+           onclick="ativarPagina(this); funcao3()"></i>
+
+        <i data-lucide="clipboard-check"
+           class="lucide w-6 h-6 cursor-pointer nav-icon relative"
+           onclick="ativarPagina(this); funcao4()"></i>
+
+        <i data-lucide="file"
+           class="lucide w-6 h-6 cursor-pointer nav-icon relative"
+           onclick="ativarPagina(this); funcao5()"></i>
+    </div>
+
+    <!-- ações finais -->
+    <div class="flex flex-col items-center gap-5 mb-3">
+        <div class="relative">
+            <i id="iconeSino"
+               data-lucide="bell"
+               class="lucide w-6 h-6 cursor-pointer nav-icon relative"
+               onclick="mostrarNotificacoesReais()"></i>
+            <span id="badgeSino"
+                  class="absolute top-[-2px] right-[-2px] w-3 h-3 bg-red-600 rounded-full hidden border border-white"></span>
+        </div>
+
+        <button onclick="sair()" title="Sair">
+            <i data-lucide="log-out" class="lucide w-6 h-6 text-[#e5d2bd] nav-icon"></i>
+        </button>
+    </div>
+</aside>
+
+<!-- POPUP PERFIL ----------------------------------------------------------- -->
+<div id="popupPerfil"
+     class="fixed inset-0 bg-transparent z-50 hidden flex items-center justify-center">
+    <div class="bg-white p-6 rounded-xl w-full max-w-md shadow-lg border-4 border-[#3D1F0C]
+                text-[#3D1F0C] animate-fade-in relative">
+
+        <h2 class="text-xl font-bold mb-4 text-center">Editar Perfil</h2>
+
+        <div class="flex flex-col items-center mb-6">
+            <div id="fotoWrapper" class="relative group cursor-pointer">
+                <img id="popupFoto"
+                     src="https://i.pravatar.cc/80?img=5"
+                     alt="Foto de Perfil"
+                     class="rounded-full w-28 h-28 border-4 border-[#3D1F0C] object-cover transition" />
+                <div class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center
+                            opacity-0 group-hover:opacity-100 transition">
+                    <i data-lucide="edit-2" class="w-6 h-6 text-white"></i>
+                </div>
+            </div>
+            <input type="file" id="inputFoto" accept="image/*" class="hidden" />
+        </div>
+
+        <form id="formPerfil" class="flex flex-col gap-4">
+            <label class="flex flex-col text-sm font-semibold">
+                Nome
+                <input id="inputNome" type="text" class="border p-2 rounded" placeholder="Seu nome">
+            </label>
+
+            <label class="flex flex-col text-sm font-semibold">
+                Email
+                <input id="inputEmail" type="email" class="border p-2 rounded" placeholder="seu@email.com">
+            </label>
+
+            <label class="flex flex-col text-sm font-semibold">
+                Telefone
+                <input id="inputTelefone" type="tel" class="border p-2 rounded" placeholder="(00) 00000-0000">
+            </label>
+
+            <div class="flex justify-center gap-4 mt-6">
+                <button type="submit"
+                        class="bg-[#3D1F0C] text-white px-4 py-2 rounded hover:bg-[#2c1609] transition font-semibold">
+                    Salvar
+                </button>
+                <button id="btnCancelar" type="button"
+                        class="px-4 py-2 border rounded border-[#3D1F0C] hover:bg-gray-100 transition">
+                    Cancelar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ESTILOS EXTRAS --------------------------------------------------------- -->
+<style>
+    .nav-icon {
+      transition: transform 0.2s ease, color 0.2s ease, filter 0.2s ease;
+      color: #e5d2bd;
+    }
+    .nav-icon:hover {
+      transform: scale(1.15);
+      color: #ffffff;
+      filter: drop-shadow(0 0 4px rgba(229, 210, 189, 0.7));
+    }
+    .nav-icon.active {
+      color: #ffffff !important;
+      transform: scale(1.2);
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
+    }
+    .nav-icon.active::before {
+      content: '';
+      position: absolute;
+      left: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 24px;
+      background-color: #ffffff;
+      border-radius: 4px;
+    }
+</style>
+

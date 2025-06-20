@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - AssisConnect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <style>
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .imagem-lateral {
+            background-position: 70% center;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-tl from-[#a05a2c] to-[#3D1F0C] text-[#3D1F0C] font-sans h-screen overflow-hidden">
+
+<!-- === LOGIN === -->
+<section id="telaLogin" class="w-full h-full flex">
+    <div class="w-1/2 flex items-center justify-center p-10">
+        <div class="w-full max-w-md bg-white/90 p-8 rounded-xl border-4 border-[#3D1F0C] shadow-xl animate-fade-in">
+            <h1 class="text-2xl font-extrabold text-center mb-6">Acesse sua conta</h1>
+
+            <label class="block text-sm font-semibold mb-1">Usuário</label>
+            <input type="text" id="loginUsuario" class="w-full p-2 mb-4 rounded border" />
+
+            <label class="block text-sm font-semibold mb-1">Senha</label>
+            <input type="password" id="loginSenha" class="w-full p-2 mb-2 rounded border" />
+
+            <div class="flex items-center justify-between text-sm mb-4">
+                <label class="flex items-center gap-1">
+                    <input type="checkbox" id="manterConectado" />
+                    Manter-me conectado
+                </label>
+                <button onclick="abrirRecuperacaoSenha()" class="hover:underline">Esqueci minha senha</button>
+            </div>
+
+            <!-- ⬇️ chama a nova função -->
+            <button onclick="tentarLogin()" class="w-full bg-[#3D1F0C] text-white py-2 rounded hover:bg-[#2c1609] transition font-semibold">
+                Entrar
+            </button>
+
+            <p class="mt-4 text-center text-sm">
+                Não tem uma conta?
+                <button onclick="abrirRegistro()" class="font-semibold hover:underline">Registre-se</button>
+            </p>
+
+            <div id="erroLogin" class="text-red-600 text-sm text-center mt-3 hidden">Usuário ou senha inválido!</div>
+        </div>
+    </div>
+
+    <div class="w-1/2 h-full bg-cover bg-no-repeat imagem-lateral"
+         style="background-image:url('https://img.freepik.com/premium-photo/cheerful-senior-couple-laughing-looking-camera_259150-9440.jpg?w=996');">
+    </div>
+</section>
+
+
+<!-- === REGISTRO === -->
+<section id="telaRegistro" class="w-full h-full hidden flex">
+    <div class="w-1/2 flex items-center justify-center p-10">
+        <div class="w-full max-w-md bg-white/90 p-8 rounded-xl border-4 border-[#3D1F0C] shadow-xl animate-fade-in">
+            <h1 class="text-2xl font-extrabold text-center mb-6">Crie sua conta</h1>
+
+            <label class="block text-sm font-semibold mb-1">Usuário</label>
+            <input type="text" id="usuarioRegistro" class="w-full p-2 mb-4 rounded border" />
+
+            <label class="block text-sm font-semibold mb-1">Email</label>
+            <input type="email" id="emailRegistro" class="w-full p-2 mb-4 rounded border" />
+
+            <label class="block text-sm font-semibold mb-1">Senha</label>
+            <input type="password" id="senhaRegistro" class="w-full p-2 mb-4 rounded border" />
+
+            <label class="block text-sm font-semibold mb-1">Confirmar senha</label>
+            <input type="password" id="confirmarRegistro" class="w-full p-2 mb-4 rounded border" />
+
+            <label class="block text-sm font-semibold mb-1">ADM TOKEN (opcional)</label>
+            <input type="text" id="admToken" placeholder="12345 para conta ADM" class="w-full p-2 mb-4 rounded border" />
+
+            <button onclick="registrar()" class="w-full bg-[#3D1F0C] text-white py-2 rounded hover:bg-[#2c1609] transition font-semibold">
+                Registrar
+            </button>
+
+            <p class="mt-4 text-center text-sm">
+                Já tem uma conta?
+                <button onclick="voltarLogin()" class="font-semibold hover:underline">Voltar ao login</button>
+            </p>
+
+            <div id="erroRegistro" class="text-red-600 text-sm text-center mt-3 hidden"></div>
+        </div>
+    </div>
+
+    <div class="w-1/2 h-full bg-cover bg-no-repeat imagem-lateral"
+         style="background-image: url('https://img.freepik.com/premium-photo/cheerful-senior-couple-laughing-looking-camera_259150-9440.jpg?w=996');">
+    </div>
+</section>
+
+<!-- === POPUP: Recuperar senha === -->
+<div id="popupEsqueciSenha" class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden flex items-center justify-center">
+    <div class="bg-white p-6 rounded-xl w-full max-w-md shadow-lg border-4 border-[#3D1F0C] text-[#3D1F0C] animate-fade-in">
+        <h2 class="text-xl font-bold mb-4">Recuperar senha</h2>
+
+        <div id="etapaEmail">
+            <label class="block text-sm font-semibold mb-1">Digite seu email</label>
+            <input type="email" id="emailRecuperacao" class="w-full p-2 mb-4 border rounded" />
+            <button onclick="enviarCodigoRecuperacao()" class="w-full bg-[#3D1F0C] text-white py-2 rounded hover:bg-[#2c1609] font-semibold">
+                Enviar código
+            </button>
+        </div>
+
+        <div id="etapaCodigo" class="hidden">
+            <label class="block text-sm font-semibold mb-1">Código recebido</label>
+            <input type="text" id="codigoRecuperacao" class="w-full p-2 mb-4 border rounded" />
+            <button onclick="validarCodigoRecuperacao()" class="w-full bg-[#3D1F0C] text-white py-2 rounded hover:bg-[#2c1609] font-semibold">
+                Validar código
+            </button>
+        </div>
+
+        <div id="etapaNovaSenha" class="hidden">
+            <label class="block text-sm font-semibold mb-1">Nova senha</label>
+            <input type="password" id="novaSenha" class="w-full p-2 mb-3 border rounded" />
+            <label class="block text-sm font-semibold mb-1">Confirmar nova senha</label>
+            <input type="password" id="confirmarNovaSenha" class="w-full p-2 mb-4 border rounded" />
+            <button onclick="confirmarNovaSenha()" class="w-full bg-[#3D1F0C] text-white py-2 rounded hover:bg-[#2c1609] font-semibold">
+                Alterar senha
+            </button>
+        </div>
+
+        <p id="mensagemRecuperacao" class="text-center text-sm mt-4 font-semibold text-[#3D1F0C] hidden"></p>
+
+        <button onclick="fecharPopupSenha()" class="text-sm mt-4 underline w-full text-center">Cancelar</button>
+    </div>
+</div>
+
+<!-- === POPUP: Senha alterada com sucesso === -->
+<div id="popupSenhaAlterada" class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden flex items-center justify-center">
+    <div class="bg-white p-6 rounded-xl w-full max-w-md shadow-xl border-4 border-[#3D1F0C] text-[#3D1F0C] animate-fade-in">
+        <h2 class="text-lg font-bold flex items-center gap-2">
+            <i data-lucide="check-circle" class="w-5 h-5"></i>
+            Senha Alterada
+        </h2>
+        <p class="mt-3 text-sm font-semibold">Sua senha foi atualizada com sucesso!</p>
+        <div class="flex justify-center mt-6">
+            <button onclick="fecharPopupSenhaAlterada()" class="bg-[#3D1F0C] text-white px-6 py-2 rounded-md font-semibold hover:bg-[#2c1609] transition">
+                Concluir
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="js/login.js"></script>
+</body>
+</html>

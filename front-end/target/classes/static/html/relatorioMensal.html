@@ -1,0 +1,107 @@
+<!-- relatorioMensal.html -->
+<div class="col-span-full w-full min-h-[95vh] space-y-6">
+
+    <div class="bg-[#3D1F0C] text-white rounded-xl px-6 py-5 shadow flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <i data-lucide="calendar" class="w-6 h-6"></i>
+            <div>
+                <h1 class="text-2xl font-bold">Relatórios Mensais</h1>
+                <p class="text-sm opacity-80">Veja e edite os relatórios mensais.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="areaCardsMensais" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-6 px-6"></div>
+
+    <div id="areaRelatorioDetalhado" class="px-6 mt-6">
+        <!-- Relatório do mês será injetado aqui pelo JS -->
+    </div>
+</div>
+
+<!-- Cabeçalho de impressão -->
+<div id="cabecalhoImpressao">
+    <h1 id="tituloCabecalhoMes">Relatório de Mês/Ano</h1>
+    <p id="dataHoraImpressao">Emitido em data/hora</p>
+</div>
+
+<style>
+    #cabecalhoImpressao {
+      display: none;
+      text-align: center;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    #cabecalhoImpressao h1 {
+      font-size: 30px;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: #3D1F0C;
+    }
+
+    #cabecalhoImpressao p {
+      font-size: 18px;
+      color: #3D1F0C;
+    }
+
+    @media print {
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      body * {
+        visibility: hidden;
+      }
+
+      #cabecalhoImpressao {
+        display: block !important;
+      }
+
+      #blocoRelatorioMes,
+      #blocoRelatorioMes * {
+        visibility: visible;
+      }
+
+      #blocoRelatorioMes {
+        position: absolute;
+        top: 30vh;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 80%;
+        border: none !important;
+        box-shadow: none !important;
+      }
+
+      #blocoRelatorioMes button,
+      #blocoRelatorioMes [onclick*="print"],
+      #blocoRelatorioMes .text-sm.hover\:underline {
+        display: none !important;
+      }
+    }
+
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .animate-fade-in {
+      animation: fadeInScale 0.3s ease-out;
+    }
+</style>
+
+<script>
+    window.addEventListener("beforeprint", () => {
+      const data = new Date();
+      const mes = data.toLocaleString("pt-BR", { month: "long" });
+      const ano = data.getFullYear();
+      const hora = data.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+      const dia = data.toLocaleDateString("pt-BR");
+
+      document.getElementById("tituloCabecalhoMes").textContent =
+        `Relatório de ${mes[0].toUpperCase() + mes.slice(1)}/${ano}`;
+      document.getElementById("dataHoraImpressao").textContent =
+        `Emitido em ${dia} às ${hora}`;
+    });
+</script>
