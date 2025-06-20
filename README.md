@@ -1,8 +1,6 @@
 # (EN-US)  
 # **AssisConnect – Elderly Care Management System**
 
-![6](https://github.com/user-attachments/assets/3d6ad183-f790-4c2a-b541-3505d599e640)
-
 **AssisConnect** is a system currently under development, designed to assist in the **management of an elderly care home**, which currently operates under **precarious conditions using paper-based methods**.
 
 The project aims to **digitally modernize** the institution’s routine, bringing more **organization, agility**, and **visibility** to critical information like resident data, meals, and reports.
