@@ -97,7 +97,6 @@ The system is **actively evolving**, based on **real-world testing** and user fe
 # (PT-BR)  
 # **AssisConnect – Sistema de Gestão para Lar de Idosos**
 
-![6](https://github.com/user-attachments/assets/3d6ad183-f790-4c2a-b541-3505d599e640)
 
 **AssisConnect** é um sistema em desenvolvimento, criado para **ajudar na gestão de um lar de idosos**, que atualmente funciona em **condições precárias e com registros feitos em papel**.
 
