@@ -1,6 +1,8 @@
 # (EN-US)  
 # **AssisConnect – Elderly Care Management System**
 
+![6](https://github.com/user-attachments/assets/3d6ad183-f790-4c2a-b541-3505d599e640)
+
 **AssisConnect** is a system currently under development, designed to assist in the **management of an elderly care home**, which currently operates under **precarious conditions using paper-based methods**.
 
 The project aims to **digitally modernize** the institution’s routine, bringing more **organization, agility**, and **visibility** to critical information like resident data, meals, and reports.
@@ -13,7 +15,8 @@ The project aims to **digitally modernize** the institution’s routine, bringin
 - **HTML, CSS (Tailwind)** – Structure and styling  
 - **JavaScript** – Front-end logic  
 - **Axios** – HTTP requests  
-- **Thymeleaf** – Dynamic templates
+- **Thymeleaf** – Dynamic templates  
+- **SQL Workbench CE** – Database visualization and management
 
 ---
 
@@ -23,11 +26,10 @@ The project aims to **digitally modernize** the institution’s routine, bringin
 - **Elderly Registration**  
 - **Resident Form**  
 - **Meal Planning**  
-- **Monthly Reports**
+- **Monthly Reports**  
+- **Database Management**
 
 Each module is designed with a **user-friendly interface**, tailored for caregivers and staff members.
-
-📌 *Below you can insert screenshots or GIFs for each section:*
 
 ---
 
@@ -76,6 +78,15 @@ Each module is designed with a **user-friendly interface**, tailored for caregiv
 
 ---
 
+## **6. Database Management**
+
+> **Function**: Store and query all resident and report data.  
+> **Details**: Managed via **SQL Workbench CE**, allowing quick visualization and debugging of tables.
+
+![6](https://github.com/user-attachments/assets/3d6ad183-f790-4c2a-b541-3505d599e640)
+
+---
+
 ## **Final Notes**
 
 This project was created as part of a **social impact initiative**, with the goal of providing **technological dignity** to elder care homes with limited infrastructure.  
@@ -87,6 +98,8 @@ The system is **actively evolving**, based on **real-world testing** and user fe
 
 # (PT-BR)  
 # **AssisConnect – Sistema de Gestão para Lar de Idosos**
+
+![6](https://github.com/user-attachments/assets/3d6ad183-f790-4c2a-b541-3505d599e640)
 
 **AssisConnect** é um sistema em desenvolvimento, criado para **ajudar na gestão de um lar de idosos**, que atualmente funciona em **condições precárias e com registros feitos em papel**.
 
@@ -100,7 +113,8 @@ O projeto tem como objetivo **modernizar digitalmente** a rotina da instituiçã
 - **HTML, CSS (Tailwind)** – Estrutura e estilização  
 - **JavaScript** – Lógica do front-end  
 - **Axios** – Requisições HTTP  
-- **Thymeleaf** – Templates dinâmicos
+- **Thymeleaf** – Templates dinâmicos  
+- **SQL Workbench CE** – Visualização e gerenciamento do banco de dados
 
 ---
 
@@ -110,11 +124,10 @@ O projeto tem como objetivo **modernizar digitalmente** a rotina da instituiçã
 - **Cadastro de Idosos**  
 - **Formulário de Novo Residente**  
 - **Planejamento de Refeições**  
-- **Relatórios Mensais**
+- **Relatórios Mensais**  
+- **Banco de Dados**
 
 Cada módulo possui uma **interface simples e acessível**, pensada para cuidadores e administradores.
-
-📌 *Abaixo você pode colar os prints ou GIFs de cada etapa:*
 
 ---
 
@@ -160,6 +173,15 @@ Cada módulo possui uma **interface simples e acessível**, pensada para cuidado
 > **Detalhes**: Mostra total de idosos, média de idade, proporções por gênero e campo para observações.
 
 ![5](https://github.com/user-attachments/assets/a83abe19-d3c4-4fa1-b48f-23ed231bee6f)
+
+---
+
+## **6. Banco de Dados**
+
+> **Função**: Armazenar e consultar os dados da instituição.  
+> **Detalhes**: Todo o banco é gerenciado via **SQL Workbench CE**, facilitando visualização e manutenção das tabelas.
+
+![6](https://github.com/user-attachments/assets/3d6ad183-f790-4c2a-b541-3505d599e640)
 
 ---
 
